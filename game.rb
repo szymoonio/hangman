@@ -7,7 +7,7 @@ class Game
     @@game_count += 1
     self.id = @@game_count
     self.word = get_word
-    self.board = '_ ' * word.length
+    self.board = Array.new(word.length, '_')
     self.correct = Array.new(word.length, false)
     self.guesses_left = 8
   end
@@ -19,49 +19,48 @@ class Game
   end
 
   def check_letter(char)
-    letters = word.to_a
-    correct = false
+    letters = word.split('')
+    hit = false
     letters.each_with_index do |val, ind|
       if char == val && correct[ind] == false
         self.correct[ind] = true
         self.board[ind] = val
-        correct = true
+        hit = true
       end
     end
-    self.guesses_left -= 1
-    correct  
+    hit 
   end
 
   def display_state
-    puts board
+    puts board.join(" ")
     if guesses_left == 1
       puts "Last chance!"
     else
-      puts "You have #{guesses_left} left!"
+      puts "You have #{guesses_left} guesses left!"
     end
   end
 
   def play_game
+    display_state
     while guesses_left > 0
-      display_state
       puts "Your guess: "
       char = gets.chomp
       if check_letter(char)
         puts "There you go!"
       else
-        "Not this time!"
+        puts "Not this time!"
+        self.guesses_left -= 1
       end
-      unless correct.includes(false)
+      display_state
+      unless correct.include?(false)
         puts "You got it!"
         return
       end
     end
-    puts "Game over!"
+    puts "Game over! The word was #{word}"
   end
   
   private
 
   attr_accessor :word, :correct
 end
-g = Game.new
-p g
