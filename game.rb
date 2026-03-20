@@ -12,6 +12,10 @@ class Game
     self.guesses_left = 8
   end
 
+  def serialize
+    
+  end
+
   def get_word
     words = File.readlines('google-10000-english-no-swears.txt', chomp: true)
     words_filtered = words.select{|w| w.length >= 5 && w.length <= 12}
@@ -44,7 +48,7 @@ class Game
     display_state
     while guesses_left > 0
       puts "Your guess: "
-      char = gets.chomp
+      char = gets.chomp.downcase
       if check_letter(char)
         puts "There you go!"
       else
