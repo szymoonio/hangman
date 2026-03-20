@@ -4,6 +4,8 @@ puts "Welcome to Hangman!\n If you want to load a saved game, type 'load'. If yo
 inst = gets.chomp
 if inst == 'load'
   save = Game.choose_saved
+end
+if save
   game = Game.load(save)
 else
   game = Game.new  

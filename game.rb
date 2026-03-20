@@ -32,7 +32,7 @@ class Game
 
   def save_game
     Dir.mkdir('saves') unless Dir.exist?('saves')
-    filename = "saves/#{Date}_save.json"
+    filename = "saves/#{Time.now}_save.json"
     File.open(filename, 'w') do |file|
       file.puts self.serialize
     end
@@ -54,7 +54,7 @@ class Game
       puts "No file at this index"
       return nil
     end
-    File.read("saves/#{filenames[selection]}")
+    File.read("./saves/#{filenames[selection - 1]}")
   end
 
   def check_letter(char)
