@@ -39,6 +39,24 @@ class Game
     puts "Game saved to #{filename}!"
   end
 
+  def self.choose_saved
+    if !Dir.exist?('saves') || Dir.empty?('saves')
+      puts "Nothing saved!"
+      return nil
+    end
+    filenames = Dir.children('saves')
+    filenames.each_with_index do |file, index|
+      puts "#{index + 1}: #{file}"
+    end
+    puts "Choose a file by index"
+    selection = gets.chomp.to_i
+    if selection <= 0 || selection > filenames.length
+      puts "No file at this index"
+      return nil
+    end
+    File.read("saves/#{filenames[selection]}")
+  end
+
   def check_letter(char)
     letters = word.split('')
     hit = false
@@ -66,6 +84,10 @@ class Game
     while guesses_left > 0
       puts "Your guess: "
       char = gets.chomp.downcase
+      if char == 'save'
+        save_game
+        return nil
+      end
       if check_letter(char)
         puts "There you go!"
       else
@@ -75,7 +97,7 @@ class Game
       display_state
       unless correct.include?(false)
         puts "You got it!"
-        return
+        return nil
       end
     end
     puts "Game over! The word was #{word}"
