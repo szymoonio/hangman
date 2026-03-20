@@ -30,6 +30,15 @@ class Game
     words_filtered[rand(0...words_filtered.length)]
   end
 
+  def save_game
+    Dir.mkdir('saves') unless Dir.exist?('saves')
+    filename = "saves/#{Date}_save.json"
+    File.open(filename, 'w') do |file|
+      file.puts self.serialize
+    end
+    puts "Game saved to #{filename}!"
+  end
+
   def check_letter(char)
     letters = word.split('')
     hit = false
