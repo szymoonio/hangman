@@ -1,19 +1,27 @@
+require 'json'
+
 class Game
-  @@game_count = 0
+  attr_accessor :board, :guesses_left
 
-  attr_accessor :id, :board, :guesses_left, :letters_left, :letters_guessed
-
-  def initialize
-    @@game_count += 1
-    self.id = @@game_count
-    self.word = get_word
-    self.board = Array.new(word.length, '_')
-    self.correct = Array.new(word.length, false)
-    self.guesses_left = 8
+  def initialize(word = get_word, board = Array.new(word.length, '_'), correct = Array.new(word.length, false), guesses_left = 8)
+    self.word = word
+    self.board = board
+    self.correct = correct
+    self.guesses_left = guesses_left
   end
 
   def serialize
-    
+    JSON.dump({
+      word: word,
+      board: board,
+      correct: correct,
+      guesses_left: guesses_left,
+    })
+  end
+
+  def self.load(save)
+    data = JSON.parse(save)
+    new(data['word'], data['board'], data['correct'], data['guesses_left'])
   end
 
   def get_word
